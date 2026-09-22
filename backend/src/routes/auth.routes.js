@@ -34,13 +34,13 @@ router.post('/register', async (req, res) => {
 
 // POST /api/auth/login
 router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body; // Changed from email to username/email field
 
-  if (!email || !password) {
-    return res.status(400).json({ error: 'email and password are required' });
+  if (!username || !password) {
+    return res.status(400).json({ error: 'username and password are required' });
   }
 
-  const user = db.users.find(u => u.email === email);
+  const user = db.users.find(u => u.email === username || u.username === username);
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
     return res.status(401).json({ error: 'Invalid credentials' });

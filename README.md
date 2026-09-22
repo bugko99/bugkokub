@@ -1,29 +1,29 @@
-# ⚡ DocConverter – ระบบแปลงเอกสาร
+# ⚡ DCMS – ระบบรับเรื่องร้องเรียนศูนย์ดำรงธรรมจังหวัดศรีสะเกษ
+(Damrongdham Center Management System)
 
-ระบบแปลงเอกสารออนไลน์ที่ใช้ Docker Compose พร้อม React + Vite, Node.js + Express (ใช้ In-memory Database ไม่ต้องต่อฐานข้อมูลภายนอก)
+> **สถานะการพัฒนา:** `กำลังพัฒนา` (Phase 1: Project Setup - เสร็จสิ้น)
 
-## 📦 Services
+ระบบรับเรื่องร้องเรียนออนไลน์ที่พัฒนาด้วย React + Vite, Node.js + Express และ MySQL 8 (ใช้ Docker Compose สำหรับ Development)
 
-| Service      | URL                          | Port             |
-|-------------|------------------------------|------------------|
-| Frontend    | http://localhost:5173         | 5173             |
-| Backend API | http://localhost:5001/api     | 5001             |
+## 📦 Services (Development Environment)
+
+| Service      | URL                          | Port             | หน้าที่ |
+|-------------|------------------------------|------------------|---|
+| Frontend    | http://localhost:5173         | 5173             | หน้าจอ Web UI |
+| Backend API | http://localhost:5001/api     | 5001             | เซิร์ฟเวอร์ API |
+| Database    | -                             | 3307 (Host)      | MySQL 8 Database |
+| phpMyAdmin  | http://localhost:8081         | 8081             | จัดการ Database ผ่านเว็บ |
 
 ---
 
 ## 🚀 คำสั่ง Docker
 
-### เริ่มต้นครั้งแรก (build + start)
+### เริ่มต้นระบบ (build + start background)
 ```bash
-docker compose up --build
+docker compose up -d --build
 ```
 
 ### เริ่มต้น (ไม่ build ใหม่)
-```bash
-docker compose up
-```
-
-### เริ่มต้น background (detached)
 ```bash
 docker compose up -d
 ```
@@ -31,12 +31,6 @@ docker compose up -d
 ### หยุดทุก service
 ```bash
 docker compose down
-```
-
-### Build ใหม่เฉพาะ service
-```bash
-docker compose build backend
-docker compose build frontend
 ```
 
 ### ดู logs
@@ -49,106 +43,49 @@ docker compose logs -f backend
 docker compose logs -f frontend
 ```
 
-### เข้า container
-```bash
-docker compose exec backend sh
-docker compose exec frontend sh
-```
-
-### ดูสถานะ service
-```bash
-docker compose ps
-```
-
-### Restart เฉพาะ service
-```bash
-docker compose restart backend
-```
-
 ---
 
-## 📁 Directory Structure
+## 📁 Directory Structure (Phase 1)
 
-```
+```text
 bugkokub/
 ├── docker-compose.yml
 ├── .env
-├── .gitignore
-│
+├── .env.example
+├── docs/                      # เอกสาร Planning & Architecture
+├── db/
+│   └── init/                  # โฟลเดอร์สำหรับ SQL Scripts (Phase 2)
 ├── backend/
 │   ├── Dockerfile.dev
 │   ├── package.json
 │   └── src/
-│       ├── index.js             # Entry point
-│       ├── config/
-│       │   └── db.js            # In-memory mock storage
-│       ├── middleware/
-│       │   ├── auth.js          # JWT middleware
-│       │   ├── upload.js        # Multer middleware
-│       │   └── errorHandler.js
-│       └── routes/
-│           ├── auth.routes.js   # POST /api/auth/login|register
-│           └── jobs.routes.js   # CRUD /api/jobs
-│
+│       └── server.js          # Entry point
 └── frontend/
     ├── Dockerfile.dev
     ├── package.json
     ├── vite.config.js
-    ├── index.html
     └── src/
-        ├── main.jsx
-        ├── App.jsx
-        ├── index.css
-        ├── api/
-        │   └── client.js        # Axios instance
-        ├── context/
-        │   └── AuthContext.jsx
-        ├── components/
-        │   ├── Navbar.jsx
-        │   └── PrivateRoute.jsx
-        └── pages/
-            ├── LoginPage.jsx
-            ├── RegisterPage.jsx
-            └── DashboardPage.jsx
 ```
-
----
-
-## 🔑 Demo Account
-
-| Field    | Value             |
-|----------|-------------------|
-| Email    | demo@example.com  |
-| Password | demo1234          |
-
----
-
-## 🌐 API Endpoints
-
-| Method | Path                   | Auth | Description              |
-|--------|------------------------|------|--------------------------|
-| GET    | /api/health            | ❌   | Health check             |
-| POST   | /api/auth/register     | ❌   | สมัครสมาชิก              |
-| POST   | /api/auth/login        | ❌   | เข้าสู่ระบบ              |
-| GET    | /api/jobs              | ✅   | ดูรายการงานทั้งหมด       |
-| POST   | /api/jobs              | ✅   | อัปโหลดไฟล์และแปลง      |
-| GET    | /api/jobs/:id          | ✅   | ดูสถานะงาน              |
-| DELETE | /api/jobs/:id          | ✅   | ลบงาน                   |
 
 ---
 
 ## ⚙️ Environment Variables (.env)
 
+ไฟล์ `.env` ต้องสร้างไว้ที่ Root folder (ใช้ `.env.example` เป็นต้นแบบ)
+
 | Variable              | Description                        |
 |-----------------------|------------------------------------|
-| `JWT_SECRET`          | Secret key for JWT signing         |
-| `VITE_API_URL`        | Frontend → Backend API URL         |
+| `JWT_SECRET`          | Secret key สำหรับ Sign JWT         |
+| `VITE_API_URL`        | URL สำหรับเชื่อมต่อ Backend API       |
+| `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` | ข้อมูลเชื่อมต่อ MySQL |
 
 ---
 
-## 📝 Notes
+## 📝 Roadmap & Phases
+*อ้างอิงจาก `docs/planning/10-implementation-plan.md`*
 
-- **bind mounts**: source code ถูก mount เข้า container แบบ real-time
-- **anonymous volume**: `/app/node_modules` ถูกแยกออกจาก bind mount
-- **In-memory Database**: ข้อมูลผู้ใช้และงานจะหายไปเมื่อรีสตาร์ท backend
-- **Hot reload**: ทั้ง frontend (Vite HMR) และ backend (nodemon) รองรับ hot reload
+- ✅ **Phase 0:** Requirement and Architecture
+- ✅ **Phase 1:** Project Setup
+- ⏳ **Phase 2:** Database Schema and Seed Data
+- ⏳ **Phase 3:** Backend Core and MySQL Connection
+- ⏳ **Phase ...**

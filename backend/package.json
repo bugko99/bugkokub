@@ -2,10 +2,10 @@
   "name": "docconverter-backend",
   "version": "1.0.0",
   "description": "Document Converter Backend API",
-  "main": "src/index.js",
+  "main": "src/server.js",
   "scripts": {
-    "dev": "nodemon src/index.js",
-    "start": "node src/index.js"
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

@@ -4,7 +4,7 @@ import api from '../api/client';
 import { useAuth } from '../context/AuthContext';
 
 export default function LoginPage() {
-  const [form,    setForm]    = useState({ email: '', password: '' });
+  const [form,    setForm]    = useState({ username: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error,   setError]   = useState('');
   const { login }  = useAuth();
@@ -35,11 +35,11 @@ export default function LoginPage() {
         <p className="sub">ยินดีต้อนรับกลับมา</p>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="email">อีเมล</label>
+            <label htmlFor="username">ชื่อผู้ใช้ หรือ อีเมล</label>
             <input
-              id="email" type="email" name="email"
-              value={form.email} onChange={handleChange}
-              placeholder="demo@example.com" required
+              id="username" type="text" name="username"
+              value={form.username} onChange={handleChange}
+              placeholder="admin / admin@example.com" required
             />
           </div>
           <div className="form-group">
